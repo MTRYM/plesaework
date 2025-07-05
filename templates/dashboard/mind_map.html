@@ -207,7 +207,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   console.log("[DEBUG] DOMContentLoaded déclenché");
 
-  const mindData = {{ mindmap.data | tojson }};
+  const mindData = {{ mindmap_data | tojson }}
   console.log("[DEBUG] Données mindData :", mindData);
 
   const options = {
