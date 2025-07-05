@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Membres</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --white: #ffffff;
+      --text: #1f1f1f;
+      --muted: #6b7280;
+      --highlight: #eef2ff;
+      --card-shadow: rgba(0, 0, 0, 0.05);
+      --radius: 12px;
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --danger: #dc2626;
+          --color-primary: #6c63ff;
+    --color-secondary: #4e4e8a;
+    --color-bg: #f9f9fb;
+    --color-text: #1f1f1f;
+    --color-muted: #6b7280;
+    --color-white: #ffffff;
+    --card-shadow: rgba(0, 0, 0, 0.04);
+    --highlight: #ebebf5;
+    --radius: 14px;
+    --transition: 0.3s ease;
+    }
+    
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+
+  body {
+    display: flex;
+    height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .sidebar {
+    width: 240px;
+    background: var(--color-white);
+    border-right: 1px solid var(--highlight);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .user-info img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .user-info strong {
+    font-weight: 600;
+  }
+
+  .user-info span {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--color-text);
+    padding: 10px 15px;
+    border-radius: var(--radius);
+    transition: background var(--transition), color var(--transition);
+    font-weight: 500;
+  }
+
+  .nav-links a.active,
+  .nav-links a:hover {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .nav-links i {
+    width: 20px;
+    height: 20px;
+  }
+
+  .logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: var(--radius);
+    transition: background var(--transition);
+  }
+
+  .logout:hover {
+    background: var(--highlight);
+    color: var(--color-text);
+  }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+    <div class="sidebar">
+      <div>
+        <div class="user-info">
+          <img src="{{ user.profile_picture_url or 'https://via.placeholder.com/60' }}" alt="Profil" />
+          <strong>{{ user.username }}</strong>
+          <span>{{ user.email }}</span>
+        </div>
+        <nav class="nav-links">
+          <a href="{{ url_for('dashboard.projects') }}"><i data-feather="folder"></i> Projets</a>
+          {% if user.rank and user.rank.name == 'admin' %}
+            <a href="{{ url_for('dashboard.create_group') }}"><i data-feather="plus-circle"></i> Créer un projet</a>
+          {% endif %}
+
+          {% if user.rank and user.rank.name == 'admin' %}
+            <a href="{{ url_for('dashboard.members') }}"  class="active"><i data-feather="users"></i> Membres</a>
+          {% endif %}
+
+          {% if user.group_memberships|selectattr("role_in_group", "equalto", "messager")|list %}
+            <a href="{{ url_for('dashboard.messages') }}"><i data-feather="message-square"></i> Messages</a>
+          {% endif %}
+
+           <a href="{{ url_for('dashboard.settings') }}"><i data-feather="settings"></i> Paramètres</a>
+        </nav>
+      </div>
+      <a href="{{ url_for('auth.logout') }}" class="logout">
+        <i data-feather="log-out"></i> Déconnexion
+      </a>
+    </div>
+
+<div class="main-content" style="flex:1; padding: 40px; overflow-y: auto;">
+  <h1 style="font-size: 2rem; margin-bottom: 20px;">Liste des membres</h1>
+
+  <form method="POST" style="margin-bottom: 30px;">
+    {{ form.hidden_tag() }}
+    <input type="text" name="query" placeholder="Rechercher un membre..." value="{{ form.query.data or '' }}"
+           style="padding: 10px 15px; width: 100%; max-width: 400px; border: 1px solid var(--highlight); border-radius: var(--radius); font-size: 1rem;">
+  </form>
+
+  <div class="members-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
+    {% for member in members %}
+      <div class="member-card" style="background: var(--white); padding: 20px; border-radius: var(--radius); box-shadow: 0 4px 12px var(--card-shadow); display: flex; flex-direction: column; align-items: center; text-align: center;">
+        <img src="{{ member.profile_picture_url or 'https://via.placeholder.com/80' }}" alt="Profil" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+        <strong style="font-size: 1.1rem;">{{ member.username }}</strong>
+        <span style="font-size: 0.9rem; color: var(--muted);">{{ member.first_name }}</span>
+        <a href="{{ url_for('dashboard.edit_member', user_id=member.id) }}" class="edit-btn"style="margin-top: 15px; padding: 8px 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 0.9rem; text-decoration: none;">Modifier</a>
+      </div>
+    {% else %}
+      <p>Aucun membre trouvé.</p>
+    {% endfor %}
+  </div>
+</div>
+ <script>
+    feather.replace();
+  </script>
+</body>
+</html>

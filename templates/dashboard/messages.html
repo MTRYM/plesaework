@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Messagerie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+:root {
+  --color-primary: #6c63ff;
+  --color-secondary: #4e4e8a;
+  --color-bg: #f9f9fb;
+  --color-text: #1f1f1f;
+  --color-muted: #6b7280;
+  --color-white: #ffffff;
+  --color-light: #f3f4f6;
+  --card-shadow: rgba(0, 0, 0, 0.04);
+  --highlight: #ebebf5;
+  --radius: 14px;
+  --transition: 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  display: flex;
+  height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.sidebar {
+  width: 240px;
+  background: var(--color-white);
+  border-right: 1px solid var(--highlight);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.user-info img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-info strong {
+  font-weight: 600;
+}
+
+.user-info span {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--color-text);
+  padding: 10px 15px;
+  border-radius: var(--radius);
+  transition: background var(--transition), color var(--transition);
+  font-weight: 500;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 8px;
+  border-radius: var(--radius);
+  transition: background var(--transition);
+}
+
+.logout:hover {
+  background: var(--highlight);
+  color: var(--color-text);
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+  background-color: var(--color-bg);
+}
+
+.main-content h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.add-btn {
+  align-self: flex-start;
+  padding: 10px 18px;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-bottom: 30px;
+  font-weight: 500;
+  transition: background var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.add-btn:hover {
+  background: var(--color-secondary);
+}
+
+.discussion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.discussion-item {
+  background: var(--color-white);
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px var(--card-shadow);
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--highlight);
+}
+
+.discussion-item:hover {
+  background: var(--color-light);
+  transform: translateY(-3px);
+}
+
+.discussion-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.discussion-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.discussion-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.discussion-meta {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+.discussion-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.discussion-date {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.discussion-icon {
+  stroke: var(--color-muted);
+}
+
+.discussion-icon.small {
+  width: 18px;
+  height: 18px;
+}
+
+.discussion-view {
+  width: 50%;
+  background: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.discussion-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.discussion-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--highlight);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.discussion-header h2 {
+  font-size: 1.2rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.discussion-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  box-shadow: var(--card-shadow);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.from-me {
+  align-self: flex-end;
+  background: var(--color-primary);
+  color: white;
+}
+
+.from-them {
+  align-self: flex-start;
+  background: var(--highlight);
+  color: var(--color-text);
+}
+
+.discussion-input {
+  padding: 12px 20px;
+  border-top: 1px solid var(--highlight);
+  display: flex;
+  gap: 10px;
+  background: var(--color-white);
+}
+
+.discussion-input textarea {
+  width: 100%;
+  max-height: 47px;
+  resize: none;
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  font-size: 1rem;
+  line-height: 1.4;
+  background-color: var(--highlight);
+  color: var(--color-text);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.discussion-input textarea:focus {
+  outline: none;
+  background-color: var(--color-white);
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.discussion-input button {
+  background: var(--color-primary);
+  border: none;
+  color: white;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.discussion-input button:hover {
+  background: var(--color-secondary);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius);
+  width: 400px;
+  box-shadow: var(--card-shadow);
+}
+
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid var(--highlight);
+  border-radius: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.messagerie-layout {
+  display: flex;
+  height: 100%;
+}
+
+.no-discussion-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--color-muted);
+  padding: 40px;
+}
+
+.placeholder-icon {
+  width: 48px;
+  height: 48px;
+  stroke: var(--color-muted);
+  margin-bottom: 10px;
+}
+
+.discussion-view.no-discussion .discussion-inner {
+  display: none;
+}
+
+.discussion-view:not(.no-discussion) .no-discussion-placeholder {
+  display: none;
+}
+
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+    <div class="sidebar">
+      <div>
+        <div class="user-info">
+          <img src="{{ user.profile_picture_url or 'https://via.placeholder.com/60' }}" alt="Profil" />
+          <strong>{{ user.username }}</strong>
+          <span>{{ user.email }}</span>
+        </div>
+        <nav class="nav-links">
+          <a href="{{ url_for('dashboard.projects') }}"><i data-feather="folder"></i> Projets</a>
+          {% if user.rank and user.rank.name == 'admin' %}
+            <a href="{{ url_for('dashboard.create_group') }}"><i data-feather="plus-circle"></i> Créer un projet</a>
+          {% endif %}
+
+          {% if user.rank and user.rank.name == 'admin' %}
+            <a href="{{ url_for('dashboard.members') }}"><i data-feather="users"></i> Membres</a>
+          {% endif %}
+
+          {% if user.group_memberships|selectattr("role_in_group", "equalto", "messager")|list %}
+            <a href="{{ url_for('dashboard.messages') }}" class="active"><i data-feather="message-square"></i> Messages</a>
+          {% endif %}
+
+          <a href="{{ url_for('dashboard.settings') }}"><i data-feather="settings"></i> Paramètres</a>
+        </nav>
+      </div>
+      <a href="{{ url_for('auth.logout') }}" class="logout">
+        <i data-feather="log-out"></i> Déconnexion
+      </a>
+    </div>
+
+  <!-- Liste des discussions -->
+  <div class="main-content">
+    <h1>Messagerie</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="discussion-list-header">
+      {% if user_in_group and user_in_group.role_in_group == 'messager' %}
+      <button class="add-btn" onclick="openModal()">
+        <i data-feather="plus-circle"></i> Nouvelle discussion
+      </button>
+      {% endif %}
+    </div>
+
+    <ul class="discussion-list">
+      {% for discussion in discussions %}
+      <li class="discussion-item" onclick="openDiscussion('{{ discussion.title }}', {{ discussion.id }})">
+        <div class="discussion-left">
+          <i data-feather="message-square" class="discussion-icon"></i>
+          <div class="discussion-text">
+            <div class="discussion-title">{{ discussion.title }}</div>
+            <div class="discussion-meta">{{ discussion.creator.first_name }} {{ discussion.creator.last_name }}</div>
+          </div>
+        </div>
+        <div class="discussion-right">
+          <div class="discussion-date">
+            {{ discussion.created_at.strftime('%d/%m/%y') if discussion.created_at else '' }}
+          </div>
+          <i data-feather="users" class="discussion-icon small"></i>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+
+  </div>
+
+<div id="discussionPanel" class="discussion-view no-discussion">
+  <!-- Si aucune discussion ouverte -->
+  <div class="no-discussion-placeholder">
+    <i data-feather="message-square" class="placeholder-icon"></i>
+    <p>Aucune discussion sélectionnée</p>
+  </div>
+
+  <!-- Tout le contenu à masquer tant que no-discussion est présent -->
+  <div class="discussion-inner">
+    <div class="discussion-header">
+      <h2 id="discussionTitle">Titre</h2>
+      <button class="close-btn" onclick="closeDiscussion()">
+        <i data-feather="x"></i>
+      </button>
+    </div>
+    <div class="discussion-messages"></div>
+        <div class="discussion-input">
+          <textarea placeholder="Écrire un message…" rows="1"></textarea>
+          <button><i data-feather="send"></i></button>
+        </div>
+  </div>
+</div>
+
+
+  <!-- Modal création discussion -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h2>Nouvelle discussion</h2>
+      <form method="POST" action="{{ url_for('dashboard.create_discussion') }}">
+        {{ discussion_form.hidden_tag() }}
+
+        <div class="form-group">
+          {{ discussion_form.title.label }}
+          {{ discussion_form.title(size=32) }}
+        </div>
+
+        <div class="form-group">
+          {{ discussion_form.group_id.label }}
+          {{ discussion_form.group_id() }}
+        </div>
+
+        <div class="form-group">
+          {{ discussion_form.admin_id.label }}
+          {{ discussion_form.admin_id() }}
+        </div>
+
+        <div class="modal-actions">
+          {{ discussion_form.submit() }}
+          <button type="button" onclick="closeModal()">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  feather.replace();
+
+  function openModal() {
+    document.getElementById('modal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+  }
+
+  function openDiscussion(title, discussionId) {
+    const panel = document.getElementById("discussionPanel");
+    const titleElem = document.getElementById("discussionTitle");
+    const messagesContainer = panel.querySelector(".discussion-messages");
+    const textarea = panel.querySelector("textarea");
+
+    panel.classList.remove("no-discussion");
+    titleElem.textContent = title;
+    panel.setAttribute('data-discussion-id', discussionId);
+    messagesContainer.innerHTML = '';
+    textarea.value = '';
+    textarea.rows = 1;
+
+    fetch(`/dashboard/get-messages/${discussionId}`)
+      .then(res => res.json())
+      .then(data => {
+        data.messages.forEach(msg => {
+          const div = document.createElement("div");
+          div.classList.add("message-bubble", msg.from_current_user ? "from-me" : "from-them");
+          div.textContent = msg.content;
+          messagesContainer.appendChild(div);
+        });
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      });
+  }
+
+  function closeDiscussion() {
+    const panel = document.getElementById("discussionPanel");
+    panel.classList.add("no-discussion");
+    panel.removeAttribute("data-discussion-id");
+
+    panel.querySelector(".discussion-messages").innerHTML = '';
+    panel.querySelector("textarea").value = '';
+    panel.querySelector("textarea").rows = 1;
+    document.getElementById("discussionTitle").textContent = '';
+  }
+
+  function sendMessage() {
+    const panel = document.getElementById("discussionPanel");
+    const discussionId = panel.getAttribute("data-discussion-id");
+    const textarea = panel.querySelector("textarea");
+    const message = textarea.value.trim();
+
+    if (!message) return;
+
+    fetch("/dashboard/send-message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        discussion_id: discussionId,
+        content: message
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const div = document.createElement("div");
+      div.classList.add("message-bubble", "from-me");
+      div.textContent = data.content;
+
+      const container = document.querySelector(".discussion-messages");
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+
+      textarea.value = "";
+      textarea.rows = 1;
+    });
+  }
+
+  // Bouton "envoyer"
+  document.querySelector(".discussion-input button").addEventListener("click", sendMessage);
+
+  // Envoi avec Entrée, saut ligne avec Shift+Entrée
+  document.querySelector(".discussion-input textarea").addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Auto-ajustement hauteur du textarea
+  document.querySelector(".discussion-input textarea").addEventListener("input", function () {
+    this.rows = 1;
+    this.rows = Math.min(6, Math.floor(this.scrollHeight / 24));
+  });
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/srxw6645/junior-association-caissedejeuneentrepreneurs.fr"
+PassengerBaseURI "/"
+PassengerPython "/home/srxw6645/virtualenv/junior-association-caissedejeuneentrepreneurs.fr/3.9/bin/python"
+PassengerAppLogFile "/home/srxw6645/logs/passenger.log"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+RewriteEngine On 
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteCond %{HTTPS} !on
+RewriteRule ^(.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+SetEnv DATABASE_URL mysql+pymysql://srxw6645:Yb6t-G6rz-zJT!@localhost/srxw6645_juniorAssociation
+SetEnv FEEDBACK_RECEIVER contactasso555@gmail.com
+SetEnv SECRET_KEY R6(gF/Sj%76hxT7?Y42*saoq,b[x>[By,_&gv2k<(0>,71|r2;,,<gB:^<Ox;2n
+SetEnv SMTP_PASSWORD eqnr acso tkqt zutv
+SetEnv SMTP_PORT 465
+SetEnv SMTP_SERVER smtp.gmail.com
+SetEnv SMTP_USERNAME contactasso555@gmail.com
+SetEnv PROFILE_PICTURE_URL_PATH static/images/user_image
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END

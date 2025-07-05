@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard - Utilisateurs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+:root {
+  --bg: #f9fafb;
+  --white: #ffffff;
+  --text: #1f1f1f;
+  --muted: #6b7280;
+  --highlight: #eef2ff;
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --card-shadow: rgba(0, 0, 0, 0.05);
+  --radius: 12px;
+}
+
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .sidebar {
+      width: 240px;
+      background-color: var(--white);
+      border-right: 1px solid var(--highlight);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .user-info img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+    }
+
+    .user-info span {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      padding: 10px 15px;
+      border-radius: var(--radius);
+      transition: background 0.2s ease;
+      font-weight: 500;
+    }
+
+    .nav-links a.active {
+      background-color: var(--highlight);
+      font-weight: 600;
+    }
+
+    .logout {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      background-color: var(--bg);
+    }
+
+    .main-content h1 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+    .modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: var(--radius);
+  width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.modal-content h3 {
+  font-size: 1.25rem;
+  margin-bottom: 15px;
+}
+.modal-content select {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+.modal-content button {
+  transition: background 0.2s ease;
+}
+
+
+    .user-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-auto-rows: auto;
+      gap: 20px;
+    }
+
+    .user-section {
+      background-color: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px var(--card-shadow);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .user-section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .user-profile img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .user-profile span {
+      font-weight: 500;
+    }
+
+.add-btn {
+  margin-top: auto;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+.add-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+    .members-section {
+      grid-column: 1 / -1;
+      background-color: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px var(--card-shadow);
+      padding: 20px;
+    }
+
+    .members-section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    .members-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .member {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100px;
+    }
+
+    .member img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-bottom: 5px;
+    }
+
+    .member span {
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div>
+      <div class="user-info">
+        <img src="{{ user.profile_picture_url or 'https://via.placeholder.com/60' }}" alt="Profil" />
+        <strong>{{ user.username }}</strong>
+        <span>{{ user.email }}</span>
+      </div>
+      <nav class="nav-links">
+        <a href="{{ url_for('dashboard.projects') }}"><i data-feather="folder"></i> Projets</a>
+        <a href="#" class="active"><i data-feather="eye"></i> Vue Projet</a>
+      </nav>
+    </div>
+    <div class="logout">
+      <i data-feather="log-out"></i> Déconnexion
+    </div>
+  </div>
+
+  <div class="main-content">
+    <h1>{{ group.name }}</h1>
+
+    <div class="user-grid">
+      <!-- Section Chef -->
+       {% set chefs = users_by_rank['chef'] %}
+       <div class="user-section">
+         <h3>Chefs</h3>
+         {% if chefs %}
+           {% for chef in chefs %}
+             <div class="user-profile" style="justify-content: space-between;">
+               <div style="display:flex; align-items:center; gap:10px;">
+                 <img src="{{ chef.profile_picture_url }}" alt="Chef" />
+                 <span>{{ chef.first_name }} {{ chef.last_name }}</span>
+               </div>
+               {% if user.rank.name == 'admin' and chef.id != user.id %}
+                 <form method="POST" action="{{ url_for('dashboard.remove_user_from_group', group_id=group.id, user_id=chef.id) }}">
+                   <button type="submit" style="background:none; border:none; color:red;">✖</button>
+                 </form>
+               {% endif %}
+             </div>
+           {% endfor %}
+         {% else %}
+           <p>Aucun chef assigné.</p>
+           {% if user.rank.name == 'admin' %}
+             <button class="add-btn" onclick="openModal('chef')">Ajouter Chef</button>
+           {% endif %}
+         {% endif %}
+       </div>
+
+
+      <!-- Section Trésorier -->
+      <div class="user-section">
+        <h3>Trésorier</h3>
+        {% if tresorier %}
+          <div class="user-profile" style="justify-content: space-between;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <img src="{{ tresorier.profile_picture_url }}" alt="Trésorier" />
+              <span>{{ tresorier.first_name }} {{ tresorier.last_name }}</span>
+            </div>
+            {% if user.rank.name in ['admin', 'chef'] and tresorier.id != user.id %}
+              <form method="POST" action="{{ url_for('dashboard.remove_user_from_group', group_id=group.id, user_id=tresorier.id) }}">
+                <button type="submit" style="background:none; border:none; color:red;">✖</button>
+              </form>
+            {% endif %}
+          </div>
+        {% else %}
+          <p>Aucun trésorier assigné.</p>
+          {% if user.rank.name in ['admin', 'chef'] %}
+            <button class="add-btn" onclick="openModal('trésorier')">Ajouter Trésorier</button>
+          {% endif %}
+        {% endif %}
+      </div>
+
+
+      <!-- Section Messager -->
+      <div class="user-section">
+        <h3>Messager</h3>
+        {% for messager in users_by_rank['messager'] %}
+        <div class="user-profile" style="justify-content: space-between;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <img src="{{ messager.profile_picture_url }}" alt="Messager" />
+            <span>{{ messager.first_name }} {{ messager.last_name }}</span>
+          </div>
+          {% if user.rank.name in ['admin','chef'] and messager.id != user.id %}
+            <form method="POST" action="{{ url_for('dashboard.remove_user_from_group', group_id=group.id, user_id=messager.id) }}">
+                <button type="submit" style="background:none; border:none; color:red;">✖</button>
+            </form>
+          {% endif %}
+        </div>
+        {% else %}
+          <p>Aucun messager assigné.</p>
+        {% endfor %}
+        {% if user.rank.name in ['admin', 'chef'] %}
+          <button class="add-btn" onclick="openModal('messager')">Ajouter Messager</button>
+        {% endif %}
+      </div>
+
+      <!-- Section Membres -->
+      <div class="members-section">
+        <h3>Membres</h3>
+        <div class="members-list">
+          {% for member in users_by_rank['membre'] %}
+          <div class="member" style="display:flex; flex-direction:column; align-items:center; position:relative;">
+            <img src="{{ member.profile_picture_url }}" alt="Membre">
+            <span>{{ member.first_name }} {{ member.last_name }}</span>
+            {% if user.rank.name in ['admin', 'chef'] and member.id != user.id %}
+                <form method="POST" action="{{ url_for('dashboard.remove_user_from_group', group_id=group.id, user_id=member.id) }}" style="position:absolute; top:0; right:0;">
+                    <button type="submit" style="background:none; border:none; color:rgba(255,0,0,0.5); font-size:10px;">✖</button>
+                </form>
+            {% endif %}
+          </div>
+          {% else %}
+            <p>Aucun membre dans ce projet.</p>
+          {% endfor %}
+        </div>
+         {% if user.rank.name in ['admin', 'chef'] %}
+        	<button class="add-btn" onclick="openModal('membre')">Ajouter Membre</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+  <div id="addRoleModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
+  <div class="modal-content" style="background:white; padding:20px; border-radius:8px; width:400px;">
+    <h3>Ajouter un utilisateur</h3>
+    <form id="addRoleForm" method="POST" action="{{ url_for('dashboard.add_user_to_group') }}">
+      <input type="hidden" name="group_id" value="{{ group.id }}">
+      <input type="hidden" name="role" id="modalRole">
+      
+      <label for="user_id">Utilisateur :</label>
+      <select name="user_id" id="userSelect" required style="width:100%; margin-bottom:10px;">
+        {% for u in all_users %}
+          <option value="{{ u.id }}">{{ u.first_name }} {{ u.last_name }} ({{ u.username }})</option>
+        {% endfor %}
+      </select>
+
+      <div style="display: flex; justify-content: space-between;">
+        <button type="submit" style="padding: 10px 20px; background:#2563eb; color:white; border:none; border-radius:6px;">Ajouter</button>
+        <button type="button" onclick="closeModal()" style="padding: 10px 20px; background:#ddd; border:none; border-radius:6px;">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>
+  <script>
+    feather.replace();
+    function openModal(role) {
+        document.getElementById('modalRole').value = role;
+        document.getElementById('addRoleModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('addRoleModal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

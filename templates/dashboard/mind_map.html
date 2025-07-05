@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carte Mentale - {{ project.name }}</title>
+<!-- Polyfill Babel pour regeneratorRuntime (async/await) -->
+<script src="https://cdn.jsdelivr.net/npm/@babel/polyfill@7.12.1/dist/polyfill.min.js"></script>
+
+<!-- MindElixir CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mind-elixir/dist/mind-elixir.min.css">
+
+<!-- MindElixir JS -->
+<script src="https://cdn.jsdelivr.net/npm/mind-elixir/dist/mind-elixir.min.js"></script>
+
+  <style>
+:root {
+  --bg: #f9fafb;
+  --white: #ffffff;
+  --text: #1f1f1f;
+  --muted: #6b7280;
+  --highlight: #eef2ff;
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --card-shadow: rgba(0, 0, 0, 0.05);
+  --radius: 12px;
+}
+
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .sidebar {
+      width: 240px;
+      background-color: var(--white);
+      border-right: 1px solid var(--highlight);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .user-info img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+    }
+
+    .user-info span {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      padding: 10px 15px;
+      border-radius: var(--radius);
+      transition: background 0.2s ease;
+      font-weight: 500;
+    }
+
+    .nav-links a.active {
+      background-color: var(--highlight);
+      font-weight: 600;
+    }
+
+    .logout {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      background-color: var(--bg);
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 30px;
+      overflow: hidden;
+    }
+
+    #mind-map-canvas {
+      flex: 1;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #f9f9f9;
+      position: relative;
+      overflow: auto;
+    }
+
+    .node {
+      position: absolute;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: grab;
+      user-select: none;
+      white-space: nowrap;
+      font-weight: 500;
+      transition: transform 0.2s;
+    }
+
+    .node:hover {
+      transform: scale(1.05);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .add-child {
+      display: none;
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: #28a745;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .node:hover .add-child {
+      display: flex;
+    }
+
+    .node.dragging {
+      opacity: 0.6;
+      z-index: 1000;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    svg.connector {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div>
+      <div class="user-info">
+        <img src="{{ user.profile_picture_url or 'https://via.placeholder.com/60' }}" alt="Profil" />
+        <strong>{{ user.username }}</strong>
+        <span>{{ user.email }}</span>
+      </div>
+      <nav class="nav-links">
+        <a href="{{ url_for('dashboard.projects') }}"><i data-feather="folder"></i> Projets</a>
+        <a href="#" class="active"><i data-feather="eye"></i> Carte Mentale</a>
+      </nav>
+    </div>
+    <div class="logout">
+      <i data-feather="log-out"></i> Déconnexion
+    </div>
+  </div>
+
+<div class="main-content">
+  <h2>Carte Mentale : {{ project.name }}</h2>
+  <div id="map" style="height:80vh;"></div>
+  {% if current_user.role_in_project(project.id) in ['chef', 'trésorier'] %}
+  <button id="save-map" class="save-btn">Sauvegarder</button>
+  {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("[DEBUG] DOMContentLoaded déclenché");
+
+  const mindData = {{ mindmap.data | tojson }};
+  console.log("[DEBUG] Données mindData :", mindData);
+
+  const options = {
+    el: '#map',
+    direction: MindElixir.LEFT,
+    draggable: true,
+    contextMenu: true,
+    toolBar: true,
+    nodeMenu: true,
+    keypress: true
+  };
+
+  const mind = new MindElixir(options);
+
+  try {
+    mind.init(mindData);  // ⚠️ mindData doit contenir nodeData.root === true
+    console.log("[DEBUG] MindElixir initialisé !");
+  } catch (e) {
+    console.error("[ERREUR] lors de l'initialisation de MindElixir:", e);
+  }
+
+  document.getElementById('save-map')?.addEventListener('click', () => {
+    const json = mind.getAllData();
+    console.log("[DEBUG] Données à sauvegarder :", json);
+
+    fetch("{{ url_for('dashboard.save_mind_map', project_id=project.id) }}", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(json)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("Carte mentale enregistrée !");
+      } else {
+        alert("Erreur lors de l'enregistrement.");
+        console.error("[ERREUR] Réponse serveur :", data);
+      }
+    });
+  });
+});
+</script>
+
+
+</body>
+</html>

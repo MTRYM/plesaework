@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paramètres</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --white: #ffffff;
+      --text: #1f1f1f;
+      --muted: #6b7280;
+      --highlight: #eef2ff;
+      --card-shadow: rgba(0, 0, 0, 0.05);
+      --radius: 12px;
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --danger: #dc2626;
+          --color-primary: #6c63ff;
+    --color-secondary: #4e4e8a;
+    --color-bg: #f9f9fb;
+    --color-text: #1f1f1f;
+    --color-muted: #6b7280;
+    --color-white: #ffffff;
+    --card-shadow: rgba(0, 0, 0, 0.04);
+    --highlight: #ebebf5;
+    --radius: 14px;
+    --transition: 0.3s ease;
+    }
+    
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+
+  body {
+    display: flex;
+    height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .sidebar {
+    width: 240px;
+    background: var(--color-white);
+    border-right: 1px solid var(--highlight);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .user-info img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .user-info strong {
+    font-weight: 600;
+  }
+
+  .user-info span {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--color-text);
+    padding: 10px 15px;
+    border-radius: var(--radius);
+    transition: background var(--transition), color var(--transition);
+    font-weight: 500;
+  }
+
+  .nav-links a.active,
+  .nav-links a:hover {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .nav-links i {
+    width: 20px;
+    height: 20px;
+  }
+
+  .logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: var(--radius);
+    transition: background var(--transition);
+  }
+
+  .logout:hover {
+    background: var(--highlight);
+    color: var(--color-text);
+  }
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      background-color: var(--bg);
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .settings-section {
+      background: var(--white);
+      padding: 30px;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px var(--card-shadow);
+    }
+
+    .settings-section h2 {
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid var(--highlight);
+      border-radius: var(--radius);
+      font-size: 1rem;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px 20px;
+      background-color: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .danger {
+      background-color: #dc2626;
+      margin-left: 10px;
+    }
+
+    .preview-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-top: 10px;
+    }
+    
+    .profile-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+#profilePreview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--highlight);
+}
+
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div>
+      <div class="user-info">
+        <img src="{{ user.profile_picture_url or 'https://via.placeholder.com/60' }}" alt="Profil" />
+        <strong>{{ user.username }}</strong>
+        <span>{{ user.email }}</span>
+      </div>
+      <nav class="nav-links">
+        <a href="{{ url_for('dashboard.projects') }}"><i data-feather="folder"></i> Projets</a>
+        {% if user.rank and user.rank.name == 'admin' %}
+          <a href="{{ url_for('dashboard.create_group') }}"><i data-feather="plus-circle"></i> Créer un projet</a>
+        {% endif %}
+        {% if user.rank and user.rank.name == 'admin' %}
+          <a href="{{ url_for('dashboard.members') }}"><i data-feather="users"></i> Membres</a>
+        {% endif %}
+        {% if user.group_memberships|selectattr("role_in_group", "equalto", "messager")|list %}
+          <a href="{{ url_for('dashboard.messages') }}"><i data-feather="message-square"></i> Messages</a>
+        {% endif %}
+        <a href="{{ url_for('dashboard.settings') }}" class="active"><i data-feather="settings"></i> Paramètres</a>
+      </nav>
+    </div>
+    <a href="{{ url_for('auth.logout') }}" class="logout">
+      <i data-feather="log-out"></i> Déconnexion
+    </a>
+  </div>
+
+  <div class="main-content">
+    <form method="POST" enctype="multipart/form-data" class="settings-section">
+      <h2>Informations de base</h2>
+      {{ base_form.hidden_tag() }}
+      <label>{{ base_form.username.label }}</label>
+      {{ base_form.username() }}
+      <label>{{ base_form.email.label }}</label>
+      {{ base_form.email() }}
+      <label>{{ base_form.phone.label }}</label>
+      {{ base_form.phone() }}
+      <label>{{ base_form.age.label }}</label>
+      {{ base_form.age() }}
+      <button type="submit" name="submit_base">Enregistrer</button>
+    </form>
+
+    <form method="POST" class="settings-section">
+      <h2>Mot de passe</h2>
+      {{ password_form.hidden_tag() }}
+      <label>{{ password_form.current_password.label }}</label>
+      {{ password_form.current_password() }}
+      <label>{{ password_form.new_password.label }}</label>
+      {{ password_form.new_password() }}
+      <label>{{ password_form.confirm_password.label }}</label>
+      {{ password_form.confirm_password() }}
+      <button type="submit" name="submit_password">Changer le mot de passe</button>
+</form>
+
+    <form method="POST" enctype="multipart/form-data" class="settings-section">
+      <h2>Préférences</h2>
+      {{ preferences_form.hidden_tag() }}
+
+      <div class="profile-preview-container">
+        <img id="profilePreview" src="{{ user.profile_picture_url or 'https://via.placeholder.com/100' }}" alt=" ">
+      </div>
+
+      <label>{{ preferences_form.profile_picture.label }}</label>
+      {{ preferences_form.profile_picture(onchange="previewProfilePicture(this)") }}
+
+      <label>{{ preferences_form.theme.label }}</label>
+      {{ preferences_form.theme() }}
+
+      <label>{{ preferences_form.language.label }}</label>
+      {{ preferences_form.language() }}
+
+      <button type="submit" name="submit_preferences" class="save-btn">Enregistrer</button>
+    </form>
+
+    <form method="POST" class="settings-section">
+      <h2>Suppression du compte</h2>
+      {{ delete_form.hidden_tag() }}
+      {{ delete_form.delete_account(class_="btn danger") }}
+    </form>
+  </div>
+
+
+  <script>
+    feather.replace();
+
+  function previewProfilePicture(input) {
+    const preview = document.getElementById('profilePreview');
+    const file = input.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => preview.src = e.target.result;
+      reader.readAsDataURL(file);
+    }
+  }
+
+    
+  </script>
+</body>
+</html>

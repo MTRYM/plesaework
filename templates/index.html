@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>J.A.C.J.E - Accueil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-primary: #6c63ff;
+      --color-secondary: #4e4e8a;
+      --color-bg: #f9f9fb;
+      --color-text: #1f1f1f;
+      --color-muted: #555;
+      --transition-default: 0.3s ease-in-out;
+      --radius: 10px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 10%;
+  background: white;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  gap: 20px;
+}
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: var(--color-primary);
+    }
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+  flex: 1;
+  justify-content: center;
+}
+
+    .nav-links a {
+      color: var(--color-text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color var(--transition-default);
+    }
+
+    .nav-links a:hover {
+      color: var(--color-primary);
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: var(--color-text);
+      margin: 4px 0;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background var(--transition-default), transform var(--transition-default);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-secondary);
+      transform: scale(1.05);
+    }
+.btn-secondary {
+  background: var(--color-secondary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition-default), transform var(--transition-default);
+}
+
+.btn-secondary:hover {
+  background: #3b3b6b;
+  transform: scale(1.05);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--transition-default);
+}
+
+.btn-outline:hover {
+  background: var(--color-primary);
+  color: white;
+}
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 160px 10% 100px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--color-muted);
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      padding: 100px 10%;
+      position: relative;
+      background: white;
+    }
+
+    .section h2 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section p {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      color: var(--color-muted);
+    }
+
+    .bubbles-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    .bubble {
+      background: #f4f4f9;
+      border: 1px solid #e0e0e0;
+      padding: 30px;
+      border-radius: var(--radius);
+      width: 300px;
+      transition: transform var(--transition-default), box-shadow var(--transition-default);
+    }
+
+    .bubble:hover {
+      background: #ffffff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      transform: translateY(-5px);
+    }
+
+    .bubble h3 {
+      margin-bottom: 10px;
+      color: var(--color-text);
+    }
+
+    .bubble p {
+      color: var(--color-muted);
+    }
+
+    footer {
+      background: #f1f1f1;
+      padding: 40px 10%;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    footer a {
+      color: var(--color-primary);
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        background: white;
+        width: 100%;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+    }
+    .highlight {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #6c63ff, #a188ff);
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.svg-decoration {
+  position: absolute;
+  z-index: -1;
+  opacity: 0.05;
+}
+
+.glass {
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.label {
+  display: inline-block;
+  background: var(--color-primary);
+  color: white;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  border-radius: 50px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.bubble p:hover {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.rotating-icon {
+  position: absolute;
+  opacity: 0.05;
+  animation: slow-rotate 60s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes slow-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+<header>
+  <div class="logo">JACJE</div>
+
+  <nav class="nav-links">
+    <a href="#">Accueil</a>
+    <a href="#">À propos</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="header-actions">
+    <button class="btn-secondary" onclick="window.location.href='/contact'">Nous contacter</button>
+    <button class="btn-outline" onclick="window.location.href='/login'">Connexion</button>
+  </div>
+
+  <div class="menu-toggle" id="menu-toggle">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Circumventus mazim notare littera</h1>
+    <p>Nam aequitate eum arduas nunc vel piogenerant hucusque. Videtur, profes, praetensiones & accompagnement dignus.</p>
+    <button class="btn-primary">Nous contacter</button>
+  </section>
+
+<!-- Pourquoi nous choisir + SVG décoratif -->
+<section class="section gradient-bg" style="position: relative; color: white;">
+  <svg class="svg-decoration" style="top: -50px; left: -60px;" width="200" height="200" fill="currentColor" viewBox="0 0 16 16">
+    <circle cx="100" cy="100" r="100" fill="white"/>
+  </svg>
+
+  <h2><span class="highlight">Pourquoi</span> nous choisir&nbsp;?</h2>
+  <p>Des solutions <span class="highlight">créatives</span>, un <span class="highlight">accompagnement humain</span>, et une <span class="highlight">vision claire</span>.</p>
+
+  <div class="bubbles-container">
+    <div class="bubble glass" style="color: #fff;">
+      <div class="label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 6px;">
+          <path d="M12 2L15 8H21L16.5 12L18 18L12 14L6 18L7.5 12L3 8H9L12 2Z" />
+        </svg>
+        Réactif
+      </div>
+      <h3 style="color: var(--color-primary);">Réactivité</h3>
+      <p>Notre équipe répond vite à vos besoins, avec précision.</p>
+    </div>
+    <div class="bubble glass" style="color: #fff;">
+      <div class="label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 6px;">
+          <path d="M9 21H15V19H9V21ZM12 2C8.13 2 5 5.13 5 9C5 11.38 6.19 13.47 8 14.74V17H16V14.74C17.81 13.47 19 11.38 19 9C19 5.13 15.87 2 12 2Z"/>
+        </svg>
+        Expertise
+      </div>
+      <h3 style="color: var(--color-primary);">Connaissance</h3>
+      <p>Des années d'expérience dans le numérique, le design, la tech.</p>
+    </div>
+    <div class="bubble glass" style="color: #fff;">
+      <div class="label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 6px;">
+          <path d="M16 11C17.66 11 19 12.34 19 14C19 15.66 17.66 17 16 17H8C6.34 17 5 15.66 5 14C5 12.34 6.34 11 8 11H9V9.5C9 8.67 9.67 8 10.5 8H13.5C14.33 8 15 8.67 15 9.5V11H16ZM13 11V9.5H11V11H13ZM12 3C13.66 3 15 4.34 15 6H9C9 4.34 10.34 3 12 3Z"/>
+        </svg>
+        Support
+      </div>
+      <h3 style="color: var(--color-primary);">Accompagnement</h3>
+      <p>On marche avec vous. Pas juste une fois. À chaque étape.</p>
+    </div>
+  </div>
+</section>
+
+  <!-- Call To Action + SVG bas -->
+  <section class="section" style="background: var(--color-bg);">
+    <h2 style="text-align: center;">Prêt à vous lancer ?</h2>
+    <p>Contactez-nous et discutons de vos objectifs ensemble.</p>
+    <div style="text-align: center; margin-top: 30px;">
+      <button class="btn-primary">Commencer maintenant</button>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style="position:absolute; bottom: 0; left: 0; width: 100%; height: auto; z-index: -1;">
+      <path fill="#6c63ff" fill-opacity="0.1" d="M0,64L60,101.3C120,139,240,213,360,224C480,235,600,181,720,181.3C840,181,960,235,1080,240C1200,245,1320,203,1380,181.3L1440,160L1440,320L0,320Z"></path>
+    </svg>
+  </section>
+<!-- SVG décorations animées -->
+<svg class="svg-decoration rotating-icon" style="top: 20px; right: 60px;" width="100" height="100" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M12 2V4M12 20V22M20 12H22M2 12H4M17.657 6.343L16.243 7.757M7.757 16.243L6.343 17.657M17.657 17.657L16.243 16.243M7.757 7.757L6.343 6.343M12 6A6 6 0 1 1 6 12 6 6 0 0 1 12 6z"/>
+</svg>
+
+<svg class="svg-decoration rotating-icon" style="bottom: 50px; left: 50px;" width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M9 21H15V19H9V21ZM12 2C8.13 2 5 5.13 5 9C5 11.38 6.19 13.47 8 14.74V17H16V14.74C17.81 13.47 19 11.38 19 9C19 5.13 15.87 2 12 2Z"/>
+</svg>
+
+<svg class="svg-decoration rotating-icon" style="bottom: 100px; right: 30px;" width="90" height="90" viewBox="0 0 24 24" fill="currentColor">
+  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+  <circle cx="12" cy="12" r="5" fill="currentColor"/>
+</svg>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 J.A.C.J.E. Tous droits réservés.</p>
+    <div>
+      <a href="#">Mentions légales</a> •
+      <a href="#">Politique de confidentialité</a>
+    </div>
+  </footer>
+
+  <!-- Script menu toggle -->
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>

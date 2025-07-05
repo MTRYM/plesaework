@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard - Projets</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --white: #ffffff;
+      --text: #1f1f1f;
+      --muted: #6b7280;
+      --highlight: #eef2ff;
+      --card-shadow: rgba(0, 0, 0, 0.05);
+      --radius: 12px;
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --danger: #dc2626;
+          --color-primary: #6c63ff;
+    --color-secondary: #4e4e8a;
+    --color-bg: #f9f9fb;
+    --color-text: #1f1f1f;
+    --color-muted: #6b7280;
+    --color-white: #ffffff;
+    --card-shadow: rgba(0, 0, 0, 0.04);
+    --highlight: #ebebf5;
+    --radius: 14px;
+    --transition: 0.3s ease;
+    }
+    
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+
+  body {
+    display: flex;
+    height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .sidebar {
+    width: 240px;
+    background: var(--color-white);
+    border-right: 1px solid var(--highlight);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .user-info img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .user-info strong {
+    font-weight: 600;
+  }
+
+  .user-info span {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--color-text);
+    padding: 10px 15px;
+    border-radius: var(--radius);
+    transition: background var(--transition), color var(--transition);
+    font-weight: 500;
+  }
+
+  .nav-links a.active,
+  .nav-links a:hover {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .nav-links i {
+    width: 20px;
+    height: 20px;
+  }
+
+  .logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: var(--radius);
+    transition: background var(--transition);
+  }
+
+  .logout:hover {
+    background: var(--highlight);
+    color: var(--color-text);
+  }
+
+  .main-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+  }
+
+  .main-content h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .search-bar {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px 20px;
+    margin-bottom: 30px;
+    border-radius: var(--radius);
+    border: 1px solid var(--highlight);
+    background: var(--color-white);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+
+  .search-bar:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .project-card {
+    background: var(--color-white);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 12px var(--card-shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  }
+
+  .project-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+
+  .project-card .content {
+    padding: 15px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: var(--color-text);
+  }
+
+  .project-card p {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    margin-bottom: 15px;
+    flex-grow: 1;
+  }
+
+  .project-card button {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--radius);
+    margin: 0 20px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+
+  .project-card button:hover {
+    background: var(--color-secondary);
+  }
+
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+    <div class="sidebar">
+      <div>
+        <div class="user-info">
+          <img src="{{ user.profile_picture_url or 'https://via.placeholder.com/60' }}" alt="Profil" />
+          <strong>{{ user.username }}</strong>
+          <span>{{ user.email }}</span>
+        </div>
+        <nav class="nav-links">
+          <a href="{{ url_for('dashboard.projects') }}" class="active"><i data-feather="folder"></i> Projets</a>
+          {% if user.rank and user.rank.name == 'admin' %}
+            <a href="{{ url_for('dashboard.create_group') }}"><i data-feather="plus-circle"></i> Créer un projet</a>
+          {% endif %}
+
+          {% if user.rank and user.rank.name == 'admin' %}
+            <a href="{{ url_for('dashboard.members') }}"><i data-feather="users"></i> Membres</a>
+          {% endif %}
+
+          {% if user.group_memberships|selectattr("role_in_group", "equalto", "messager")|list %}
+            <a href="{{ url_for('dashboard.messages') }}"><i data-feather="message-square"></i> Messages</a>
+          {% endif %}
+
+          <a href="{{ url_for('dashboard.settings') }}"><i data-feather="settings"></i> Paramètres</a>
+        </nav>
+      </div>
+      <a href="{{ url_for('auth.logout') }}" class="logout">
+        <i data-feather="log-out"></i> Déconnexion
+      </a>
+    </div>
+
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Projets</h1>
+    <input type="text" class="search-bar" placeholder="Rechercher des projets..." />
+
+    <div class="projects-grid">
+        {% if projects %}
+          {% for project in projects %}
+            <div class="project-card">
+              <img src="https://source.unsplash.com/400x300/?project,{{ loop.index }}" alt="Project Image" />
+              <div class="content">
+                <h3>{{ project.name }}</h3>
+                <p>{{ project.description or "Pas de description." }}</p>
+              </div>
+              <a href="{{ url_for('dashboard.project_view', project_id=project.id) }}">
+
+                <button>Voir le projet</button>
+              </a>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>Aucun projet trouvé.</p>
+        {% endif %}
+    </div>
+
+  </div>
+
+  <script>
+    feather.replace();
+    
+    const searchInput = document.querySelector('.search-bar');
+    const projectsGrid = document.querySelector('.projects-grid');
+    const projectCards = projectsGrid.querySelectorAll('.project-card');
+
+    searchInput.addEventListener('keyup', function() {
+      const searchTerm = searchInput.value.toLowerCase();
+
+      projectCards.forEach(card => {
+        const projectName = card.querySelector('h3').textContent.toLowerCase();
+        const projectDesc = card.querySelector('p').textContent.toLowerCase();
+
+        if (projectName.includes(searchTerm) || projectDesc.includes(searchTerm)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

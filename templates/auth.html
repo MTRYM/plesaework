@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Connexion - J.A.C.J.E</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-primary: #6c63ff;
+      --color-secondary: #4e4e8a;
+      --color-bg: #f9f9fb;
+      --color-text: #1f1f1f;
+      --color-muted: #555;
+      --transition-default: 0.3s ease-in-out;
+      --radius: 10px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .auth-container {
+      width: 30%;
+      min-width: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: white;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+      z-index: 1;
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 350px;
+      text-align: center;
+    }
+
+    .auth-box h2 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+      color: var(--color-primary);
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .auth-form input {
+      width: 100%;
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1px solid #ddd;
+      background: #f5f5f5;
+      color: var(--color-text);
+      font-size: 1rem;
+    }
+
+    .auth-form input::placeholder {
+      color: #999;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--color-muted);
+    }
+
+    .remember-me input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background var(--transition-default), transform var(--transition-default);
+    }
+
+    .auth-btn:hover {
+      background: var(--color-secondary);
+      transform: scale(1.03);
+    }
+
+    .signup-link {
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+
+    .signup-link a {
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: color var(--transition-default);
+    }
+
+    .signup-link a:hover {
+      color: var(--color-secondary);
+    }
+
+    .auth-image {
+      width: 70%;
+      background: url('static/images/illustrations/auth-illustration2.png') no-repeat center center/cover;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .auth-container {
+        width: 100%;
+        height: auto;
+        padding: 40px 20px;
+      }
+
+      .auth-image {
+        width: 100%;
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Section Authentification -->
+  <div class="auth-container">
+    <div class="auth-box">
+      <h2>{{ title }}</h2>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <p style="color: {% if category == 'danger' %}red{% else %}green{% endif %};">
+              {{ message }}
+            </p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" class="auth-form">
+        {{ form.hidden_tag() }}
+
+        {{ form.username(placeholder="Nom d'utilisateur") }}
+        {{ form.password(placeholder="Mot de passe") }}
+
+        <label class="remember-me">
+          <input type="checkbox" name="remember">
+          Se souvenir de moi
+        </label>
+
+        <label class="remember-me">
+          <input type="checkbox" name="terms" required>
+          J'accepte la <a href="#" style="color: var(--color-primary); text-decoration: underline;">politique de confidentialité</a>
+        </label>
+
+        {{ form.submit(class_='auth-btn') }}
+      </form>
+
+      <p class="signup-link">Pas d'identifiant ? <a href="#">Nous contacter</a></p>
+    </div>
+  </div>
+
+  <!-- Section Image -->
+  <div class="auth-image"></div>
+
+</body>
+</html>

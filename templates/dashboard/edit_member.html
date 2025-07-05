@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modifier un membre</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --white: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --highlight: #e5e7eb;
+      --card-shadow: rgba(0, 0, 0, 0.05);
+      --radius: 12px;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --danger: #dc2626;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .sidebar {
+      width: 240px;
+      background-color: var(--white);
+      border-right: 1px solid var(--highlight);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .user-info img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .user-info strong {
+        font-weight: 600;
+    }
+
+    .user-info span {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      padding: 10px 15px;
+      border-radius: var(--radius);
+      transition: background 0.2s ease;
+      font-weight: 500;
+    }
+
+    .nav-links a.active, .nav-links a:hover {
+      background-color: var(--highlight);
+      font-weight: 600;
+    }
+
+    .nav-links i {
+      stroke-width: 2;
+      width: 20px; /* Ensure icons are aligned */
+      height: 20px;
+    }
+
+    .logout {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .logout:hover {
+      background-color: var(--highlight);
+      color: var(--text);
+    }
+
+    .logout i {
+      stroke-width: 2;
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div>
+      <div class="user-info">
+        <img src="{{ user.profile_picture_url or 'https://via.placeholder.com/60' }}" alt="Profil" />
+        <strong>{{ user.username }}</strong>
+        <span>{{ user.email }}</span>
+      </div>
+      <nav class="nav-links">
+        <a href="{{ url_for('dashboard.members') }}"><i data-feather="users"></i> Membres</a>
+        <a href="#" class="active"><i data-feather="eye"></i> Modifier</a>
+      </nav>
+    </div>
+    <div class="logout">
+      <i data-feather="log-out"></i> Déconnexion
+    </div>
+  </div>
+
+<div class="main-content" style="flex:1; padding: 40px; overflow-y: auto; display: flex; justify-content: center; align-items: center;">
+  <form method="POST" enctype="multipart/form-data" style="background: var(--white); padding: 30px; border-radius: var(--radius); box-shadow: 0 6px 16px rgba(0,0,0,0.05); width: 100%; max-width: 500px;">
+    {{ form.hidden_tag() }}
+    <h1 style="font-size: 1.5rem; margin-bottom: 25px; text-align: center;">Modifier le membre</h1>
+
+    <div style="margin-bottom: 15px;">
+      {{ form.username.label(style="display:block; font-weight: 600; margin-bottom: 5px;") }}
+      {{ form.username(class_="form-control", style="width:100%; padding: 12px; border: 1px solid var(--highlight); border-radius: 8px;") }}
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      {{ form.first_name.label(style="display:block; font-weight: 600; margin-bottom: 5px;") }}
+      {{ form.first_name(class_="form-control", style="width:100%; padding: 12px; border: 1px solid var(--highlight); border-radius: 8px;") }}
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      {{ form.last_name.label(style="display:block; font-weight: 600; margin-bottom: 5px;") }}
+      {{ form.last_name(class_="form-control", style="width:100%; padding: 12px; border: 1px solid var(--highlight); border-radius: 8px;") }}
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      {{ form.age.label(style="display:block; font-weight: 600; margin-bottom: 5px;") }}
+      {{ form.age(class_="form-control", style="width:100%; padding: 12px; border: 1px solid var(--highlight); border-radius: 8px;") }}
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      {{ form.email.label(style="display:block; font-weight: 600; margin-bottom: 5px;") }}
+      {{ form.email(class_="form-control", style="width:100%; padding: 12px; border: 1px solid var(--highlight); border-radius: 8px;") }}
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      {{ form.phone.label(style="display:block; font-weight: 600; margin-bottom: 5px;") }}
+      {{ form.phone(class_="form-control", style="width:100%; padding: 12px; border: 1px solid var(--highlight); border-radius: 8px;") }}
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      {{ form.rank_id.label(style="display:block; font-weight: 600; margin-bottom: 5px;") }}
+      {{ form.rank_id(class_="form-control", style="width:100%; padding: 12px; border: 1px solid var(--highlight); border-radius: 8px;") }}
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      {{ form.profile_picture.label(style="display:block; font-weight: 600; margin-bottom: 5px;") }}
+      {{ form.profile_picture(class_="form-control") }}
+    </div>
+
+    <div style="margin-bottom: 25px;">
+      {{ form.delete_account.label(style="font-weight: 600;") }}
+      {{ form.delete_account() }} Supprimer le compte
+    </div>
+
+    <div style="display: flex; justify-content: space-between;">
+      <a href="{{ url_for('dashboard.members') }}" style="padding: 10px 20px; background: var(--muted); color: white; border-radius: 8px; text-decoration: none;">Annuler</a>
+      <button type="submit" style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px;">Enregistrer</button>
+    </div>
+  </form>
+</div>
+
+
+
+ <script>
+    feather.replace();
+  </script>
+</body>
+</html>
